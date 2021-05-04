@@ -1,70 +1,48 @@
-micronode
-=========
+
+# micronode
 
 CLI to Build Microservice Architectures using nodejs + express
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+There tends to be a lot of boilerplate code that gets implemented when creating services / APIs
+using `nodejs` and `expressjs`. This CLI hopes to automate some of the repetitive configuration associated with
+building microservices.
+
 [![Version](https://img.shields.io/npm/v/micronode.svg)](https://npmjs.org/package/micronode)
 [![Downloads/week](https://img.shields.io/npm/dw/micronode.svg)](https://npmjs.org/package/micronode)
 [![License](https://img.shields.io/npm/l/micronode.svg)](https://github.com/gtaylor5/micronode/blob/master/package.json)
 
-<!-- toc -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
+
+
 # Usage
-<!-- usage -->
 ```sh-session
 $ npm install -g micronode
-$ micronode COMMAND
-running command...
-$ micronode (-v|--version|version)
-micronode/1.0.0 darwin-x64 node-v12.18.2
 $ micronode --help [COMMAND]
 USAGE
   $ micronode COMMAND
-...
 ```
-<!-- usagestop -->
-# Commands
-<!-- commands -->
-* [`micronode hello [FILE]`](#micronode-hello-file)
-* [`micronode help [COMMAND]`](#micronode-help-command)
+## Commands
+* `create-service  Create a new microservice`
+* `help            display help for micronode`
 
-## `micronode hello [FILE]`
-
-describe the command here
+## `micronode create-service <service-name`
 
 ```
+Create a new microservice.
+
 USAGE
-  $ micronode hello [FILE]
+  $ micronode create-service [NAME]
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -d, --dir=dir  (required) [default: /Users/gerardt/Desktop/micronode] Location to place the new service.
+  -h, --help     show CLI help
 
 EXAMPLE
-  $ micronode hello
-  hello world from ./src/hello.ts!
+  $ mn create-service gateway .
 ```
 
-_See code: [src/commands/hello.ts](https://github.com/gtaylor5/micronode/blob/v1.0.0/src/commands/hello.ts)_
 
-## `micronode help [COMMAND]`
 
-display help for micronode
+  
+## Authors
 
-```
-USAGE
-  $ micronode help [COMMAND]
-
-ARGUMENTS
-  COMMAND  command to show help for
-
-OPTIONS
-  --all  see all commands in CLI
-```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
-<!-- commandsstop -->
+- [@Gerard Taylor](https://www.github.com/gtaylor5)
