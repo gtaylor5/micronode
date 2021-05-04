@@ -1,0 +1,15 @@
+FROM node:14
+
+# Create app directory
+WORKDIR /usr/src
+
+# Copy dependent libraries
+COPY package*.json ./
+
+# Install deps
+RUN npm install
+
+# Copy Service
+COPY . .
+
+CMD [ "node", "app" ]
