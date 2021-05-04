@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const { execSync } = require('child_process');
 
-class Command {
+export default class Command {
 
     static log = console.log
 

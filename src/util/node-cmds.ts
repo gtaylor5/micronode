@@ -1,4 +1,6 @@
 import { deps } from "./deps";
+import chalk from 'chalk';
+import Command from './command';
 
 const stringDeps = deps.join(" ");
 const cmds = [

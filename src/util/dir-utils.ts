@@ -2,9 +2,7 @@ import Command from "@oclif/command";
 import chalk from 'chalk';
 import { nodeCommands } from './node-cmds';
 const fs = require("fs");
-const prompt = require("prompt");
 const path = require("path");
-const { execSync } = require('child_process');
 const templateDir = path.join(__dirname, "../templates");
 
 export default class DirUtils extends Command {
