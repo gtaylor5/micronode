@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "author": "Gerard Taylor",
   "bin": {
-    "mn": "./bin/run"
+    "mn": "./bin/run",
+    "micronode": "./bin/run"
   },
   "bugs": "https://github.com/gtaylor5/micronode/issues",
   "dependencies": {

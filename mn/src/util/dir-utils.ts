@@ -1,117 +1,79 @@
 import Command from "@oclif/command";
-
+import chalk from 'chalk';
+import { nodeCommands } from './node-cmds';
 const fs = require("fs");
+const prompt = require("prompt");
 const path = require("path");
 const { execSync } = require('child_process');
+const templateDir = path.join(__dirname, "../templates");
 
 export default class DirUtils extends Command {
 
-  createApi = (baseDir: string, serviceName: string) => {
-    this.log("Initializing API...");
+  private copyUtil = (fromPath: string, toPath: string, successMsg: string) => {
+    return fs.copyFile(fromPath, toPath, (err) => {
+      if (err) {
+        this.log(chalk.bold.red(err));
+        this.exit(1);
+      } else {
+        this.log(chalk.green(successMsg))
+      }
+    });
+  }
+
+  createApi = async (baseDir: string) => {
+    this.log(chalk.yellow("Initializing API..."));
     const API = "api";
     const apiPath = path.join(baseDir, API);
+    const apiTemplate = path.join(templateDir, "api.js");
     fs.mkdirSync(apiPath);
-    const writeStream = fs.createWriteStream(path.join(apiPath, "api.js"));
-    const apiFileContents = `const express = require('express');
-const router = express.Router();
-
-// Define Routes Here:
-
-// CREATE
-router.post("/", (req, res) => {
-  const body = req.body;
-  res.status(200).send("Response from Post Request");
-})
-
-// READ
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  res.status(200).send("Getting Data for: " + id);
-});
-
-// UPDATE
-router.put("/:id", (req, res) => {
-  const { id } = req.params;
-  res.status(200).send("Updating Data for: " + id);
-});
-
-// DELETE
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-  res.status(200).send("Deleting data for: " + id);
-})
-
-module.exports = { router };
-  `;
-    writeStream.write(apiFileContents.replace(/^[ ]+|[ ]+$/g, ""));
-    writeStream.end();
+    return this.copyUtil(apiTemplate, path.join(apiPath, "api.js"), "API Created.");
   };
 
-  createIndex = (baseDir: String, serviceName: String) => {
-    this.log("Creating index.js ...");
-    const writeStream = fs.createWriteStream(path.join(baseDir, "index.js"));
-    const contents = `const express = require("express");
-const { router } = require("./api/api");
+  createIndex = async (baseDir: String, serviceName: String) => {
+    this.log(chalk.yellow("Creating index.js ..."));
+    return fs.readFile(path.join(templateDir, "server.js"), 'utf8', async (err, data) => {
+      if (err) {
+        this.log(chalk.bold.red("Error creating server file."))
+        this.log(err);
+        this.exit(1);
+      }
 
-const port = process.env.PORT || 8000;
-const app = express();
-app.use(express.json());
-
-app.use("/api/${serviceName}", router);
-app.listen(port, async () => {
-  console.log('${serviceName} Service is listening on Port', port);
-});
-  `;
-
-    writeStream.write(contents);
-    writeStream.end();
+      var result = data.replace(/SERVICE_NAME_HERE/g, `\"${serviceName}\"`)
+      return fs.writeFile(path.join(baseDir, 'index.js'), result, 'utf8', (err) => {
+        if (err) {
+          this.log(chalk.bold.red("Error creating server file."))
+          this.log(err);
+          this.exit(1);
+        } else {
+          this.log(chalk.bold.green("Server definition successfully created."));
+        }
+      });
+    });
   };
 
-  createDockerfile = (baseDir: String,) => {
-    this.log("Creating Dockerfile...");
-    const writeStream = fs.createWriteStream(path.join(baseDir, "Dockerfile"));
-    const contents = `FROM node:14
-
-# Create app directory
-WORKDIR /usr/src
-
-# Copy dependent libraries
-COPY package*.json ./
-
-# Install deps
-RUN npm install
-
-# Copy Service
-COPY . .
-
-CMD [ "node", "app" ]
-  `;
-
-    writeStream.write(contents);
-    writeStream.end();
-
+  createDockerfile = async (baseDir: string,) => {
+    this.log(chalk.yellow("Creating Dockerfile..."))
+    const templatePath = path.join(__dirname, "../templates/Dockerfile.template")
+    const destPath = path.join(baseDir, "Dockerfile");
+    return this.copyUtil(templatePath, destPath, "Dockerfile created.")
   }
 
-  initializeNodeProject = (dir: String) => {
-    const baseString = `npm --prefix=${dir} `
-    const commands = [{
-      cmd: 'init -y',
-      msg: 'Initializing Node Project'
-    }, { cmd: 'install express', msg: 'Installing Dependencies' }]
-    commands.forEach(cmd => {
-      this.log(cmd.msg);
-      execSync(`${baseString}` + cmd.cmd);
-    })
+  initializeNodeProject = (dir: string) => {
+    nodeCommands().forEach(cmd => cmd.exec(dir));
   }
 
-  build = (baseDir: string, serviceName: string) => {
+  build = async (baseDir: string, serviceName: string) => {
     const dir = path.join(baseDir, serviceName);
+    this.log(chalk.green("Directory: "), chalk.blue.bold(dir));
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
-      this.createApi(dir, serviceName);
-      this.createIndex(dir, serviceName);
-      this.createDockerfile(dir);
       this.initializeNodeProject(dir);
+      await this.createDockerfile(dir);
+      await this.createApi(dir);
+      await this.createIndex(dir, serviceName);
+    } else {
+      console.log(chalk.bold.red(`Error: ${dir} already exists.`));
+      this.exit(1);
     }
   };
 
