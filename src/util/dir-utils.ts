@@ -8,7 +8,7 @@ const templateDir = path.join(__dirname, "../templates");
 export default class DirUtils extends Command {
 
   private copyUtil = (fromPath: string, toPath: string, successMsg: string) => {
-    return fs.copyFile(fromPath, toPath, (err) => {
+    return fs.copyFile(fromPath, toPath, (err: any) => {
       if (err) {
         this.log(chalk.bold.red(err));
         this.exit(1);
@@ -29,7 +29,7 @@ export default class DirUtils extends Command {
 
   createIndex = async (baseDir: String, serviceName: String) => {
     this.log(chalk.yellow("Creating index.js ..."));
-    return fs.readFile(path.join(templateDir, "server.js"), 'utf8', async (err, data) => {
+    return fs.readFile(path.join(templateDir, "server.js"), 'utf8', async (err: any, data: string) => {
       if (err) {
         this.log(chalk.bold.red("Error creating server file."))
         this.log(err);
@@ -37,7 +37,7 @@ export default class DirUtils extends Command {
       }
 
       var result = data.replace(/SERVICE_NAME_HERE/g, `\"${serviceName}\"`)
-      return fs.writeFile(path.join(baseDir, 'index.js'), result, 'utf8', (err) => {
+      return fs.writeFile(path.join(baseDir, 'index.js'), result, 'utf8', (err: any) => {
         if (err) {
           this.log(chalk.bold.red("Error creating server file."))
           this.log(err);
