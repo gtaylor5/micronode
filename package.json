@@ -1,7 +1,7 @@
 {
   "name": "micronode-cli",
   "description": "CLI to Build Microservice Architectures using nodejs + express",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Gerard Taylor",
   "bin": {
     "mn": "./bin/run",
