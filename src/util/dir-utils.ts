@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { nodeCommands } from './node-cmds';
 const fs = require("fs");
 const path = require("path");
-const templateDir = path.join(__dirname, "../templates");
+const templateDir = path.join(__dirname, "templates");
 
 export default class DirUtils extends Command {
 
@@ -51,9 +51,8 @@ export default class DirUtils extends Command {
 
   createDockerfile = async (baseDir: string,) => {
     this.log(chalk.yellow("Creating Dockerfile..."))
-    const templatePath = path.join(__dirname, "../templates/Dockerfile.template")
     const destPath = path.join(baseDir, "Dockerfile");
-    return this.copyUtil(templatePath, destPath, "Dockerfile created.")
+    return this.copyUtil(path.join(templateDir, "Dockerfile.template"), destPath, "Dockerfile created.")
   }
 
   initializeNodeProject = (dir: string) => {

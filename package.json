@@ -1,5 +1,5 @@
 {
-  "name": "micronode",
+  "name": "micronode-cli",
   "description": "CLI to Build Microservice Architectures using nodejs + express",
   "version": "1.0.0",
   "author": "Gerard Taylor",
