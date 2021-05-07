@@ -6,8 +6,8 @@ A simple CLI to Build Microservice Architectures using nodejs + express
 There tends to be a lot of boilerplate code that gets implemented when creating services / APIs
 using `nodejs` and `expressjs`. This CLI hopes to automate some of the repetitive configuration associated with building microservices.
 
-[![Version](https://img.shields.io/npm/v/micronode.svg)](https://npmjs.org/package/micronode)
-[![Downloads/week](https://img.shields.io/npm/dw/micronode.svg)](https://npmjs.org/package/micronode)
+[![Version](https://img.shields.io/npm/v/micronode.svg)](https://npmjs.org/package/micronode-cli)
+[![Downloads/week](https://img.shields.io/npm/dw/micronode.svg)](https://npmjs.org/package/micronode-cli)
 [![License](https://img.shields.io/npm/l/micronode.svg)](https://github.com/gtaylor5/micronode/blob/master/package.json)
 
 
